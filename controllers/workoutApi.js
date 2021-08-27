@@ -11,26 +11,37 @@ router.post("/workouts/bulk", ({ body }, res) =>{
 });
 
 //post a workout
-router.post ("/workouts", ({ body }, res) =>{
-    db.Workout.create(body).then(dbWorkout =>{
-        res.json(dbWorkout);
-    }).catch(err =>{
-        res.json(err);
-    });
+router.post("/workouts", async (req,res) =>{
+    try{
+        const postWorkout = await db.Workout.findOneAndUpdate(
+            { id: req.params.id },
+            {
+                $inc: {totalDuration: req.body.duration },
+                $push: {exercises: req.body},
+            }
+        );
+        res.json(postWorkout);
+    }catch (err){
+        console.log(err);
+        res.json(err)
+    }
 });
-
 //get workouts 
 router.get("/workouts", async (req,res) =>{
     try{
-        const finalWorkout = await db.Workout.aggregate([
-            {$addFields: {totalDuration: {$sum:`$exercises.duration`}
-        }}]);
-            res.json(finalWorkout);
-    }catch(err) {
-        res.json(err);
-    };
+        const workouts = await db.Workout.aggregate([{
+            $addFields:{
+                totalDuration:{
+                    $sum: `$exercises.duration`
+                }
+            }
+        }])
+        res.json(workouts);
+    }catch (err) {
+        console.log(err);
+        res.json(err)
+    }
 });
-
 //update workout 
 
 router.put("/workouts/:id", async (req, res)=>{
@@ -45,17 +56,20 @@ router.put("/workouts/:id", async (req, res)=>{
     }
 })
 //previous workouts
-router.get("/workouts/range", async (req, res) =>{
+router.get("/workouts/range", async (req,res)=>{
     try{
-        const previousWorkouts = await db.Workout.aggregate([
-            {$sort:{day:-1}}, 
-            {$addFields: {totalDuration: 
-                {$sum:`$exercises.duration`}
-            }}]).limit(7)
-            res.json(previousWorkouts);
-    }catch(err) {
+        const workouts = await db.Workout.aggregate([{
+            $addFields:{
+                totalDuration:{
+                    $sum: `$exercise.duration`
+                }
+            }
+        }]).sort({_id:-1}).limit(7)
+        res.json(workouts);
+    }catch (err) {
+        console.log(err);
         res.json(err);
-    };
+    }
 });
 
 module.export = router;
