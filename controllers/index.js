@@ -1,18 +1,10 @@
-const router =require('express').Router();
-const workoutApi = require ('./workoutApi');
-const path = require('path');
+const express = require('express')
+const app = express();
+const router = express.Router();
+const workoutRoute = require("./workoutApi");
+const homeRoute = require("./home");
 
-router.use('/api', workoutApi);
-
-router.get('/',(req,res) =>{
-    res.sendFile(path.join(__dirname, '../public/index.html'))
-});
-router.get('/stats', (req,res =>{
-    res.sendFile(pah.join(_dirname, '../public/stats.html'))
-}));
-router.get('/exercise', (req,res)=>{
-    res.sendFile(path.join(_dirname, '../public/exercise.html'))
-});
-
+app.use('/', workoutRoute);
+app.use('/api', homeRoute);
 
 module.exports = router;
