@@ -44,3 +44,18 @@ router.put("/workouts/:id", async (req, res)=>{
         res.json(err)
     }
 })
+
+router.get("/workouts/range", async (req, res) =>{
+    try{
+        const previousWorkouts = await db.Workout.aggregate([
+            {$sort:{day:-1}}, 
+            {$addFields: {totalDuration: 
+                {$sum:`$exercises.duration`}
+            }}]).limit(7)
+            res.json(previousWorkouts);
+    }catch(err) {
+        res.json(err);
+    };
+});
+
+module.export = router;
