@@ -1,19 +1,19 @@
 const router = require('express').Router();
-const db = require('../models');
+const Workout = require('../models/Workout');
 
-//post many workouts
+
 router.post("/workouts/bulk", ({ body }, res) =>{
-    db.Workout.create(body).then(dbWorkout =>{
+    Workout.create(body).then(dbWorkout =>{
         res.json(dbWorkout);
     }).catch(err =>{
-        res.json(err);
+        res.status(400).json(err);
     });
 });
 
-//post a workout
+
 router.post("/workouts", async (req,res) =>{
     try{
-        const postWorkout = await db.Workout.findOneAndUpdate(
+        const postWorkout = await Workout.findOneAndUpdate(
             { id: req.params.id },
             {
                 $inc: {totalDuration: req.body.duration },
@@ -26,10 +26,10 @@ router.post("/workouts", async (req,res) =>{
         res.json(err)
     }
 });
-//get workouts 
-router.get("/workouts", async (req,res) =>{
+
+router.get("//workouts", async (req,res) =>{
     try{
-        const workouts = await db.Workout.aggregate([{
+        const workouts = await Workout.aggregate([{
             $addFields:{
                 totalDuration:{
                     $sum: `$exercises.duration`
@@ -42,11 +42,11 @@ router.get("/workouts", async (req,res) =>{
         res.json(err)
     }
 });
-//update workout 
+
 
 router.put("/workouts/:id", async (req, res)=>{
     try{
-        const workout = await db.Workout.updateOne(
+        const workout = await Workout.updateOne(
             {'_id': req.params.id},
             {$push: {exercises:req.body}}
         );
@@ -55,21 +55,22 @@ router.put("/workouts/:id", async (req, res)=>{
         res.json(err)
     }
 })
-//previous workouts
-router.get("/workouts/range", async (req,res)=>{
-    try{
-        const workouts = await db.Workout.aggregate([{
-            $addFields:{
-                totalDuration:{
-                    $sum: `$exercise.duration`
+
+router.get("/Workout/range", async (req,res)=>{
+    try {
+        const range = await Workout.aggregate([
+            { $sort: { day: -1 }},
+            {
+                $addFields: {
+                    totalDuration: { $sum: `$exercises.duration`}
                 }
             }
-        }]).sort({_id:-1}).limit(7)
-        res.json(workouts);
-    }catch (err) {
+        ]).limit(7)
+        res.json(range)
+    }catch(err) {
         console.log(err);
         res.json(err);
-    }
+    };
 });
 
 module.exports = router;
