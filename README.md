@@ -8,7 +8,7 @@ The goal for this project was to create the backend of an application that uses 
 
 Installation:
 
-Requires mongoDB and node.js. Close the repository to your machine and run npm i, then npm seed to geenerate some example data. After run npm start and the app will load on port localhost:3000.
+Requires mongoDB and node.js. Close the repository to your machine and run npm i, then npm seed to generate some example data. After run npm start and the app will load on port localhost:3000.
 
 Screenshots:
 
