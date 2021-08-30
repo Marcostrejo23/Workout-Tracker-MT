@@ -16,7 +16,7 @@ router.post("/workouts", async (req,res) =>{
         const postWorkout = await Workout.findOneAndUpdate(
             { id: req.params.id },
             {
-                $inc: {totalDuration: req.body.duration },
+                $in: {totalDuration: req.body.duration },
                 $push: {exercises: req.body},
             }
         );
@@ -29,17 +29,17 @@ router.post("/workouts", async (req,res) =>{
 
 router.put("/workouts/:id", async (req, res)=>{
     try{
-        const workout = await Workout.updateOne(
+        const updateWorkout = await Workout.updateOne(
             {'_id': req.params.id},
             {$push: {exercises:req.body}}
         );
-        res.json(exercise);
+        res.json(updateWorkout);
     }catch(err) {
         res.json(err)
     }
 })
 
-router.get("//workouts", async (req,res) =>{
+router.get("/workouts", async (req,res) =>{
     try{
         const workouts = await Workout.aggregate([{
             $addFields:{
@@ -55,7 +55,7 @@ router.get("//workouts", async (req,res) =>{
     }
 });
 
-router.get("/Workout/range", async (req,res)=>{
+router.get("/workout/range", async (req,res)=>{
     try {
         const range = await Workout.aggregate([
             { $sort: { day: -1 }},
