@@ -12,12 +12,9 @@ router.post("/workouts/bulk", ({ body }, res) =>{
 
 router.post("/workouts", async (req,res) =>{
     try{
-        const postWorkout = await Workout.findOneAndUpdate(
-            { id: req.params.id },
-            {
-                $in: {totalDuration: req.body.duration },
-                $push: {exercises: req.body},
-            }
+        const postWorkout = await Workout.create(
+            req.body
+          
         );
         res.json(postWorkout);
     }catch (err){
@@ -72,3 +69,5 @@ router.get("/workout/range", async (req,res)=>{
 });
 
 module.exports = router;
+
+//
