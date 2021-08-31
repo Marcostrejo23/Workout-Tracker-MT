@@ -1,16 +1,6 @@
 const router = require('express').Router();
 const Workout = require('../models/Workout');
 
-// router.get("/api/workouts", async (req, res)=>{
-//     try{
-//         const findWorkout = await Workout.findOne(
-            
-//         )
-//     }
-
-// })
-
-
 router.post("/workouts/bulk", ({ body }, res) =>{
     Workout.create(body).then(dbWorkout =>{
         res.json(dbWorkout);
