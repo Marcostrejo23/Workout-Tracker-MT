@@ -4,19 +4,14 @@ const Workout = require('../models/Workout');
 router.post("/workouts/bulk", ({ body }, res) =>{
     Workout.create(body).then(dbWorkout =>{
         res.json(dbWorkout);
-    }).catch(err =>{
-        res.status(400).json(err);
-    });
+    }).catch(err =>{res.status(400).json(err);});
 });
 
 router.post("/workouts", async (req,res) =>{
     try{
-        const postWorkout = await Workout.create(
-            req.body
-        );
+        const postWorkout = await Workout.create(req.body);
         res.json(postWorkout);
-    }catch (err){
-        console.log(err);
+    }catch (err){console.log(err);
         res.json(err)
     }
 });
@@ -43,10 +38,7 @@ router.get("/workouts", async (req,res) =>{
             }
         }])
         res.json(workouts);
-    }catch (err) {
-        console.log(err);
-        res.json(err)
-    }
+    }catch (err){console.log(err);res.json(err)}
 });
 
 router.get("/workouts/range", async (req,res)=>{
@@ -60,9 +52,7 @@ router.get("/workouts/range", async (req,res)=>{
             }
         ]).limit(7)
         res.json(range)
-    }catch(err) {
-        console.log(err);
-        res.json(err);
+    }catch(err){console.log(err);res.json(err);
     };
 });
 
