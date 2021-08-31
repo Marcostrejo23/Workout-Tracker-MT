@@ -51,7 +51,7 @@ router.get("/workouts", async (req,res) =>{
     }
 });
 
-router.get("/workout/range", async (req,res)=>{
+router.get("/workouts/range", async (req,res)=>{
     try {
         const range = await Workout.aggregate([
             { $sort: { day: -1 }},
