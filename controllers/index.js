@@ -1,5 +1,4 @@
 const express = require('express')
-// const app = express();
 const router = express.Router();
 const workoutRoute = require("./workoutApi");
 const mainRoute = require("./main");

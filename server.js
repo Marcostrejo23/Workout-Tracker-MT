@@ -5,7 +5,6 @@ const routes = require("./controllers");
 
 const PORT = process.env.PORT || 3001;
 
-// const workoutRoutes = require("./controllers");
 const app = express();
 
 app.use(logger("dev"));
@@ -14,11 +13,6 @@ app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 app.use(express.static("public"));
 app.use(routes);
-// app.use(require("./controllers/index"));
-// app.use(require("./controllers/main"));
-// app.use(require("./controllers/workoutApi"));
-
-
 
 mongoose.connect(
     process.env.MONGODB_URI || 'mongodb://localhost/workout',
